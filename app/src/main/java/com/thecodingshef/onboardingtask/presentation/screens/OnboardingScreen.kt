@@ -15,7 +15,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,7 +57,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -95,7 +93,6 @@ fun ObScreen(
         }
 
         uiState.data != null -> {
-            // SlideHalfVisibleCard()
             OnboardingContent(
                 data = uiState.data!!,
                 currentCardIndex = currentCardIndex,
@@ -511,58 +508,6 @@ private fun EducationCard(
     }
 }
 
-fun Int?.orDefault(default: Int = 1000): Int = this ?: default
-
-
-@Composable
-fun SlideHalfVisibleCard() {
-    val context = LocalContext.current
-    val density = LocalDensity.current
-
-    val cardHeight = 200.dp
-    val screenHeightPx = with(density) {
-        LocalConfiguration.current.screenHeightDp.dp.toPx()
-    }
-    val cardHeightPx = with(density) { cardHeight.toPx() }
-
-    val halfVisibleOffsetPx = screenHeightPx - (cardHeightPx / 2)
-
-    var isExpanded by remember { mutableStateOf(false) }
-
-    // Animate in pixels, not dp
-    val offsetY by animateFloatAsState(
-        targetValue = if (isExpanded) 0f else halfVisibleOffsetPx,
-        animationSpec = tween(durationMillis = 600),
-        label = "offsetY"
-    )
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.DarkGray)
-    ) {
-        Card(
-            modifier = Modifier
-                .size(cardHeight)
-                .offset { IntOffset(0, offsetY.toInt()) }
-                .align(Alignment.TopCenter)
-                .clickable { isExpanded = !isExpanded },
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = if (isExpanded) "Tap to Collapse" else "Tap to Expand",
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-    }
-}
 
 
 

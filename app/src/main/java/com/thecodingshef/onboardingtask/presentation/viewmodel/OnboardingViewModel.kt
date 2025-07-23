@@ -31,10 +31,11 @@ class OnboardingViewModel @Inject constructor(
     val animationPhase: StateFlow<AnimationPhase> = _animationPhase.asStateFlow()
 
     init {
-        fetchTestData()
+        fetchOnboardingData()
     }
 
 
+    // for testing
     fun fetchTestData() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
@@ -90,7 +91,7 @@ class OnboardingViewModel @Inject constructor(
         _uiState.value = OnboardingUiState()
         _currentCardIndex.value = 0
         _animationPhase.value = AnimationPhase.INITIAL
-        fetchTestData()
+        fetchOnboardingData()
     }
 
     fun resetAnimation() {
